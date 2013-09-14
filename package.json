@@ -1,0 +1,17 @@
+{
+  "name": "nodecoap",
+  "version": "0.0.1",
+  "description": "nodecoap",
+  "main": "api.js",
+  "scripts": {
+    "start": "nodemon lib/api.js",
+    "test": "find lib -name *.js | xargs node_modules/jshint/bin/jshint"
+  },
+  "author": "Toby Jaffey <toby@1248.io>",
+  "devDependencies": {
+    "nodemon": "~0.7.4",
+    "jshint": "~1.0.0"
+  },
+  "dependencies": {
+  }
+}
