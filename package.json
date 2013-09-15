@@ -13,5 +13,6 @@
     "jshint": "~1.0.0"
   },
   "dependencies": {
+    "URIjs": "~1.10.2"
   }
 }
