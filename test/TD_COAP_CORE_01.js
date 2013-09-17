@@ -24,6 +24,8 @@ function check2(raw) {
         throw new Error('Wrong code');
     if (pkt.getHeaderContentType() != erbium.TEXT_PLAIN)
         throw new Error('Wrong type');
+    if (pkt.getHeaderMID() != 0x1234)
+        throw new Error('Wrong MID '+pkt.getHeaderMID());
 }
 
 coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
@@ -34,6 +36,7 @@ coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
 function stimulus1() {
     console.log('1');
     coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
+        mid: 0x1234,
         beforeSend: check1,
         beforeReceive: check2,
         success: function(inpkt, payload) {
