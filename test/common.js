@@ -9,6 +9,8 @@ var step = 1;
 exports.checkStep = function (shouldbe) {
     if (step !== shouldbe)
         throw new Error("Wrong step, expected "+shouldbe+" got "+step);
+    else
+        console.log("Step "+step+" OK");
     step++;
 }
 
