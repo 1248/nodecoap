@@ -1,4 +1,4 @@
-console.log('TD_COAP_CORE_01 Perform GET transaction (CON mode)');
+console.log('TD_COAP_CORE_14 Interoperate in lossy context (CON mode, piggybacked response)');
 
 var common = require('./common.js');
 erbium = require('node-erbium');
@@ -6,34 +6,33 @@ udpApp = common.udpBearer();
 coapServerApp = common.server();
 coapClientApp = common.client();
 
-var count = 2;
+var reqDrops = 7;   // drop this many consecutive requests
+var rspDrops = 7;   // drop this many consecutive responses
 
 function check1(raw) {
-if (count > 0) {
-    count--;
-    return false;
-}
-/*
-    common.checkStep(2);
+    if (reqDrops > 0) {    // simulate some packet loss
+        reqDrops--;
+        return false;
+    }
+    common.checkStep(2, true);
     var pkt = new erbium.Erbium(raw);
     if (pkt.getHeaderType() != 0)
         throw new Error('Wrong type');
     if (pkt.getHeaderStatusCode() != 1)
         throw new Error('Wrong code');
-*/
 }
 
 function check2(raw) {
-/*
-    common.checkStep(3);
+    if (rspDrops > 0) {    // simulate some packet loss
+        rspDrops--;
+        return false;
+    }
+    common.checkStep(3, true);
     var pkt = new erbium.Erbium(raw);
     if (pkt.getHeaderStatusCode() != 69)
         throw new Error('Wrong code');
     if (pkt.getHeaderContentType() != erbium.TEXT_PLAIN)
         throw new Error('Wrong type');
-    if (pkt.getHeaderMID() != 0x1234)
-        throw new Error('Wrong MID '+pkt.getHeaderMID());
-*/
 }
 
 coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
@@ -42,19 +41,18 @@ coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
 });
 
 function stimulus1() {
-/*
     common.checkStep(1);
-*/
     coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
-        mid: 0x1234,
         beforeSend: check1,
         beforeReceive: check2,
         success: function(inpkt, payload) {
-/*
             common.checkStep(4);
-*/
             console.log(payload.toString());
-            process.exit(0);
+            common.checkStep(5);
+            if (reqDrops == 0 && rspDrops == 0)
+                process.exit(0);
+            else
+                throw new Error('Packet loss problem');
         },
         error: function() {
             console.log("Error");
