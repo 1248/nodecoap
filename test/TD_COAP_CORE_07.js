@@ -7,7 +7,7 @@ coapServerApp = common.server();
 coapClientApp = common.client();
 
 function check1(raw) {
-    console.log('2');
+    common.checkStep(2);
     var pkt = new erbium.Erbium(raw);
     if (pkt.getHeaderType() != 1)
         throw new Error('Wrong type');
@@ -16,7 +16,7 @@ function check1(raw) {
 }
 
 function check2(raw) {
-    console.log('4');
+    common.checkStep(4);
     var pkt = new erbium.Erbium(raw);
     if (pkt.getHeaderStatusCode() != 68)
         throw new Error('Wrong code '+pkt.getHeaderStatusCode());
@@ -27,20 +27,22 @@ function check2(raw) {
 }
 
 coapServerApp.put(common.TEST_ENDPOINT, function(req, res) {
-    console.log('3 ' + req.payload);
+    common.checkStep(3);
+    console.log(req.payload.toString());
     res.setContentType('text/plain');
     res.send(erbium.CHANGED_2_04, req.payload);
 });
 
 function stimulus1() {
-    console.log('1');
+    common.checkStep(1);
     coapClientApp.put(erbium.COAP_TYPE_NON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
         payload: "Hello world",
         contentType: "text/plain",
         beforeSend: check1,
         beforeReceive: check2,
         success: function(inpkt, payload) {
-            console.log('5 '+payload.toString());
+            common.checkStep(5);
+            console.log(payload.toString());
             process.exit(0);
         }
     });

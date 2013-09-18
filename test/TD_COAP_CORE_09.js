@@ -10,7 +10,7 @@ var firstTimeA = true;
 function check1(raw) {
     var pkt = new erbium.Erbium(raw);
     if (firstTimeA) {
-        console.log('2');
+        common.checkStep(2);
         if (pkt.getHeaderType() != 0)
             throw new Error('Wrong type');
         if (pkt.getHeaderStatusCode() != 1)
@@ -19,7 +19,7 @@ function check1(raw) {
             throw new Error('Wrong MID');
         firstTimeA = false;
     } else {
-        console.log('5');
+        common.checkStep(5);
         if (pkt.getHeaderType() != 2)
             throw new Error('Wrong type');
         if (pkt.getHeaderMID() != 0x1234)
@@ -33,7 +33,7 @@ var firstTimeB = true;
 function check2(raw) {
     var pkt = new erbium.Erbium(raw);
     if (firstTimeB) {
-        console.log('3');
+        common.checkStep(3);
         if (pkt.getHeaderType() != 2)
             throw new Error('Wrong type');
         if (pkt.getHeaderMID() != 0x1234)
@@ -42,7 +42,7 @@ function check2(raw) {
             throw new Error('Wrong payload');
         firstTimeB = false;
     } else {
-        console.log('4');
+        common.checkStep(4);
         if (pkt.getHeaderType() != 0)
             throw new Error('Wrong type');
         if (pkt.getHeaderStatusCode() != 69)
@@ -63,13 +63,14 @@ coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
 });
 
 function stimulus1() {
-    console.log('1');
+    common.checkStep(1);
     coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
         mid: 0x1234,
         beforeSend: check1,
         beforeReceive: check2,
         success: function(inpkt, payload) {
-            console.log('6 '+payload.toString());
+            common.checkStep(6);
+            console.log(payload.toString());
             process.exit(0);
         }
     });
