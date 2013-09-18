@@ -1,4 +1,4 @@
-console.log('TD_COAP_CORE_01 Perform GET transaction (CON mode)');
+console.log('TD_COAP_CORE_05 Perform GET transaction (NON mode)');
 
 var common = require('./common.js');
 erbium = require('node-erbium');

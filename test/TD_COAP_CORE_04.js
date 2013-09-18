@@ -25,7 +25,6 @@ function check2(raw) {
 }
 
 coapServerApp.del(common.TEST_ENDPOINT, function(req, res) {
-    console.log('3');
     res.setContentType('text/plain');
     res.send(erbium.DELETED_2_02, "You deleted");
 });
