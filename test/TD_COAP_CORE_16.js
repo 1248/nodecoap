@@ -1,0 +1,76 @@
+console.log('TD_COAP_CORE_16 Perform GET transaction with a separate response (NON mode)');
+
+var common = require('./common.js');
+erbium = require('node-erbium');
+udpApp = common.udpBearer();
+coapServerApp = common.server();
+coapClientApp = common.client();
+
+function check1(raw) {
+    var pkt = new erbium.Erbium(raw);
+    common.checkStep(2);
+    if (pkt.getHeaderType() != 1)
+        throw new Error('Wrong type');
+    if (pkt.getHeaderStatusCode() != 1)
+        throw new Error('Wrong code');
+    if (pkt.getHeaderMID() != 0x1234)
+        throw new Error('Wrong MID');
+}
+
+var firstTimeB = true;
+function check2(raw) {
+    var pkt = new erbium.Erbium(raw);
+    if (firstTimeB) {
+        common.checkStep(3);
+        if (pkt.getHeaderType() != 2)
+            throw new Error('Wrong type');
+        if (pkt.getHeaderMID() != 0x1234)
+            throw new Error('Wrong MID '+pkt.getHeaderMID());
+        if (pkt.getPayload().length != 0)
+            throw new Error('Wrong payload');
+        firstTimeB = false;
+    } else {
+        common.checkStep(4);
+        if (pkt.getHeaderType() != 1)
+            throw new Error('Wrong type');
+        if (pkt.getHeaderStatusCode() != 69)
+            throw new Error('Wrong code');
+        if (pkt.getPayload().length == 0)
+            throw new Error('Wrong payload');
+    }
+}
+
+coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
+    setTimeout(function() {
+        res.setContentType('text/plain');
+        res.send(erbium.CONTENT_2_05, 'Hello world', function(pkt) {
+            // got ack
+        });
+    }, 100);
+    res.defer();
+});
+
+function stimulus1() {
+    common.checkStep(1);
+    coapClientApp.get(erbium.COAP_TYPE_NON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
+        mid: 0x1234,
+        beforeSend: check1,
+        beforeReceive: check2,
+        success: function(inpkt, payload) {
+            common.checkStep(5);
+            console.log(payload.toString());
+            process.exit(0);
+        }
+    });
+}
+
+udpApp.start(5683, coapClientApp, coapServerApp, function(err) {
+    if (err) {
+        console.log(err);
+        process.exit(1);
+    }
+    coapServerApp.start();
+    stimulus1();
+});
+
+
