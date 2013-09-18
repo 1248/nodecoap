@@ -1,5 +1,5 @@
 /*
-    TD_COAP_CORE_02 Perform POST transaction (CON mode)
+    TD_COAP_CORE_03 Perform PUT transaction (CON mode)
 */
 
 var common = require('./common.js');
@@ -13,30 +13,30 @@ function check1(raw) {
     var pkt = new erbium.Erbium(raw);
     if (pkt.getHeaderType() != 0)
         throw new Error('Wrong type');
-    if (pkt.getHeaderStatusCode() != 2)
+    if (pkt.getHeaderStatusCode() != 3)
         throw new Error('Wrong code');
 }
 
 function check2(raw) {
     console.log('4');
     var pkt = new erbium.Erbium(raw);
-    if (pkt.getHeaderStatusCode() != 65)
-        throw new Error('Wrong code');
+    if (pkt.getHeaderStatusCode() != 68)
+        throw new Error('Wrong code '+pkt.getHeaderStatusCode());
     if (pkt.getHeaderContentType() != erbium.TEXT_PLAIN)
         throw new Error('Wrong type');
     if (pkt.getHeaderMID() != 0x1234)
         throw new Error('Wrong MID '+pkt.getHeaderMID());
 }
 
-coapServerApp.post(common.TEST_ENDPOINT, function(req, res) {
+coapServerApp.put(common.TEST_ENDPOINT, function(req, res) {
     console.log('3 ' + req.payload);
     res.setContentType('text/plain');
-    res.send(erbium.CREATED_2_01, "You posted " + req.payload);
+    res.send(erbium.CHANGED_2_04, req.payload);
 });
 
 function stimulus1() {
     console.log('1');
-    coapClientApp.post(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
+    coapClientApp.put(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
         mid: 0x1234,
         payload: "Hello world",
         contentType: "text/plain",
