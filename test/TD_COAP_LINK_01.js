@@ -31,6 +31,9 @@ function check2(raw) {
 coapServerApp.get('/discoverme', function(req, res) {
     res.setContentType('text/plain');
     res.send(erbium.CONTENT_2_05, 'I am discovered!');
+}, {
+    ct: erbium.TEXT_PLAIN,
+    title: 'A thing to be found'
 });
 
 coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
@@ -47,7 +50,7 @@ function stimulus1() {
         success: function(inpkt, payload) {
             common.checkStep(4);
             console.log(payload.toString());
-//            process.exit(0);
+            process.exit(0);
         }
     });
 }
