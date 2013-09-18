@@ -6,8 +6,8 @@ udpApp = common.udpBearer();
 coapServerApp = common.server();
 coapClientApp = common.client();
 
-var reqDrops = 7;   // drop this many consecutive requests
-var rspDrops = 7;   // drop this many consecutive responses
+var reqDrops = 2;   // drop this many consecutive requests
+var rspDrops = 2;   // drop this many consecutive responses
 
 function check1(raw) {
     if (reqDrops > 0) {    // simulate some packet loss
