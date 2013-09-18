@@ -32,8 +32,16 @@ coapServerApp.get('/discoverme', function(req, res) {
     res.setContentType('text/plain');
     res.send(erbium.CONTENT_2_05, 'I am discovered!');
 }, {
-    ct: erbium.TEXT_PLAIN,
-    title: 'A thing to be found'
+    rt:'bob',
+    title: "It's Bob!"
+});
+
+coapServerApp.get('/mystery', function(req, res) {
+    res.setContentType('text/plain');
+    res.send(erbium.CONTENT_2_05, '...');
+}, {
+    rt:'alice',
+    title: "It's Alice!"
 });
 
 coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
@@ -43,7 +51,7 @@ coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
 
 function stimulus1() {
     common.checkStep(1);
-    coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
+    coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT + '?rt=bob', {
         mid: 0x1234,
         beforeSend: check1,
         beforeReceive: check2,
