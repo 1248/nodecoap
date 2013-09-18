@@ -1,6 +1,4 @@
-/*
-    TD_COAP_CORE_04 Perform DELETE transaction (CON mode)
-*/
+console.log('TD_COAP_CORE_04 Perform DELETE transaction (CON mode)');
 
 var common = require('./common.js');
 erbium = require('node-erbium');

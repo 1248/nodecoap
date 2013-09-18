@@ -1,6 +1,4 @@
-/*
-    TD_COAP_CORE_02 Perform POST transaction (CON mode)
-*/
+console.log('TD_COAP_CORE_02 Perform POST transaction (CON mode)');
 
 var common = require('./common.js');
 erbium = require('node-erbium');

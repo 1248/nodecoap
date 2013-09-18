@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "start": "nodemon lib/api.js",
-    "test": "find lib -name *.js | xargs node_modules/jshint/bin/jshint"
+    "test": "find lib -name *.js | xargs node_modules/jshint/bin/jshint && (cd test && ./run.sh)"
   },
   "author": "Toby Jaffey <toby@1248.io>",
   "devDependencies": {
