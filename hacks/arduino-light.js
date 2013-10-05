@@ -1,3 +1,6 @@
+// a command line test script to turn Arduino light on and off
+// see https://github.com/1248/microcoap
+
 var common = require('../test/common.js');
 erbium = require('node-erbium');
 udpApp = common.udpBearer();
