@@ -15,6 +15,6 @@
   "dependencies": {
     "URIjs": "~1.10.2",
     "buffertools": "~1.1.1",
-    "node-erbium": "git+ssh://dev/git/node-erbium"
+    "node-erbium": "~0.0.1"
   }
 }
