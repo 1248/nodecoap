@@ -68,24 +68,16 @@ coapServerApp.get(common.TEST_ENDPOINT, function(req, res) {
 });
 
 function stimulus1() {
-    common.checkStep(1);
     var firstTimeB = true;
     coapClientApp.get(erbium.COAP_TYPE_CON, common.TEST_URL_BASE + common.TEST_ENDPOINT, {
         observe: true,
         mid: 0x1234,
-//        beforeSend: check1,
-//        beforeReceive: check2,
+        beforeSend: check1,
+        beforeReceive: check2,
         success: function(inpkt, payload) {
-            if (firstTimeB) {
-                firstTimeB = false;
-//                common.checkStep(4);
-                console.log(payload.toString());
-            } else {
-//                common.checkStep(6);
-                console.log(payload.toString());
-//                process.exit(0);
-                return false;   // send an RST
-            }
+            common.checkStep(1);
+            console.log(payload.toString());
+            return false;   // send an RST
         }
     });
 }
