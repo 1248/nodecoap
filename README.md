@@ -15,7 +15,7 @@ Although it has been tested against itself, it has not been well tested against 
 
 The API needs much improvement to be more node-ish, using common idioms, etc.
 
-The test direction contains an attempt to implement the ETSI plugtest scripts. These show uses of the API.
+The test directory contains an attempt to implement the ETSI plugtest scripts. These show uses of the API.
 
 
 Client example
